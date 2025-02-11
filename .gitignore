@@ -1,3 +1,4 @@
 /.vscode
 /Basic_CRUD_API
 __pycache__/
+db.sqlite3

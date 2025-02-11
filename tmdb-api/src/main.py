@@ -38,7 +38,10 @@ async def update_movie(movie_id: int, movie: MovieCreate, db: Session = Depends(
     db_movie = db.query(Movie).filter(Movie.id == movie_id).first()
     if db_movie is None:
         raise HTTPException(status_code=404, detail="Movie not found")
-    for key, value in movie.dict().items():
+    
+    # using model_dump method to get the dictionary of the movie object and
+    #  items() method to get the key, value pairs in iterable mode
+    for key, value in movie.model_dump().items():
         setattr(db_movie, key, value)
     db.commit()
     db.refresh(db_movie)
