@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal, engine, Base, get_db
+from database import engine, Base, get_db
 from models import Movie
-from schemas import MovieCreate, MovieResponse
+from schemas import MovieCreate, MovieResponse, MovieDelete
 from typing import List
 
 app = FastAPI()
@@ -11,7 +11,7 @@ app = FastAPI()
 Base.metadata.create_all(bind=engine)
 
 
-@app.post("/movies/", response_model=MovieResponse)
+@app.post("/create_movie/", response_model=MovieResponse)
 async def create_movie(movie: MovieCreate, db: Session = Depends(get_db)):
     db_movie = Movie(**movie.model_dump())
     db.add(db_movie)
@@ -19,21 +19,21 @@ async def create_movie(movie: MovieCreate, db: Session = Depends(get_db)):
     db.refresh(db_movie)
     return db_movie
 
-@app.get("/movies/", response_model=List[MovieResponse])
+@app.get("/read_movies/", response_model=List[MovieResponse])
 async def read_movies(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     movies = db.query(Movie).offset(skip).limit(limit).all()
     if not movies:
         raise HTTPException(status_code=404, detail="No movies found")
     return movies
 
-@app.get("/movies/{movie_id}", response_model=MovieResponse)
+@app.get("/read_specific_movie/{movie_id}", response_model=MovieResponse)
 async def read_movie(movie_id: int, db: Session = Depends(get_db)):
     movie = db.query(Movie).filter(Movie.id == movie_id).first()
     if movie is None:
         raise HTTPException(status_code=404, detail="Movie not found")
     return movie
 
-@app.put("/movies/{movie_id}", response_model=MovieResponse)
+@app.put("/update_movie/{movie_id}", response_model=MovieResponse)
 async def update_movie(movie_id: int, movie: MovieCreate, db: Session = Depends(get_db)):
     db_movie = db.query(Movie).filter(Movie.id == movie_id).first()
     if db_movie is None:
@@ -44,14 +44,14 @@ async def update_movie(movie_id: int, movie: MovieCreate, db: Session = Depends(
     db.refresh(db_movie)
     return db_movie
 
-@app.delete("/movies/{movie_id}", response_model=MovieResponse)
+@app.delete("/delete_movie/{movie_id}", response_model=MovieDelete)
 async def delete_movie(movie_id: int, db: Session = Depends(get_db)):
     db_movie = db.query(Movie).filter(Movie.id == movie_id).first()
     if db_movie is None:
         raise HTTPException(status_code=404, detail="Movie not found")
     db.delete(db_movie)
     db.commit()
-    return db_movie
+    return {"message": f"{db_movie}  deleted successfully"}
 
 if __name__ == "__main__":
     import uvicorn

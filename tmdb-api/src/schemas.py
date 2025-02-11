@@ -15,3 +15,6 @@ class MovieResponse(BaseModel):
     year: int
     genre: str
     imdb_rating: float
+
+class MovieDelete(BaseModel):
+    message: dict
