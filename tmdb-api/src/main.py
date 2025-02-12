@@ -54,7 +54,7 @@ async def delete_movie(movie_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Movie not found")
     db.delete(db_movie)
     db.commit()
-    return {"message": f"{db_movie}  deleted successfully"}
+    return MovieDelete(id=movie_id, message=f"movie id {movie_id} deleted successfully.")
 
 if __name__ == "__main__":
     import uvicorn

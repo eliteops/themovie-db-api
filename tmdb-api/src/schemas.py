@@ -17,4 +17,5 @@ class MovieResponse(BaseModel):
     imdb_rating: float
 
 class MovieDelete(BaseModel):
-    message: dict
+    id: int
+    message: str
