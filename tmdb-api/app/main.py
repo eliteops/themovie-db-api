@@ -10,7 +10,6 @@ app = FastAPI()
 # Create the database tables
 Base.metadata.create_all(bind=engine)
 
-
 @app.post("/create_movie/", response_model=MovieResponse)
 async def create_movie(movie: MovieCreate, db: Session = Depends(get_db)):
     db_movie = Movie(**movie.model_dump())
