@@ -2,3 +2,5 @@
 /Basic_CRUD_API
 __pycache__/
 db.sqlite3
+.venv
+.gitignore
