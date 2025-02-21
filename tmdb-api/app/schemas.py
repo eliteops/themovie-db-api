@@ -15,6 +15,9 @@ class MovieResponse(BaseModel):
     year: int
     genre: str
     imdb_rating: float
+    
+    class Config:
+        orm_mode = True
 
 class MovieDelete(BaseModel):
     id: int

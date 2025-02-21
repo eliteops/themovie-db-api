@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import engine, Base, get_db
-from models import Movie
-from schemas import MovieCreate, MovieResponse, MovieDelete
+from .database import engine, Base, get_db
+from .models import Movie
+from .schemas import MovieCreate, MovieResponse, MovieDelete
 from typing import List
 
 app = FastAPI()
@@ -12,11 +12,12 @@ Base.metadata.create_all(bind=engine)
 
 @app.post("/create_movie/", response_model=MovieResponse)
 async def create_movie(movie: MovieCreate, db: Session = Depends(get_db)):
-    db_movie = Movie(**movie.model_dump())
+    print(movie.dict())
+    db_movie = Movie(**movie.dict())
     db.add(db_movie)
     db.commit()
     db.refresh(db_movie)
-    return db_movie
+    return MovieResponse(**db_movie.__dict__)
 
 @app.get("/read_movies/", response_model=List[MovieResponse])
 async def read_movies(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
@@ -40,7 +41,7 @@ async def update_movie(movie_id: int, movie: MovieCreate, db: Session = Depends(
     
     # using model_dump method to get the dictionary of the movie object and
     #  items() method to get the key, value pairs in iterable mode
-    for key, value in movie.model_dump().items():
+    for key, value in movie.dict().items():
         setattr(db_movie, key, value)
     db.commit()
     db.refresh(db_movie)
