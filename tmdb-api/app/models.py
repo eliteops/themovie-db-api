@@ -5,7 +5,7 @@ class Movie(Base):
     __tablename__ = "movies"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    year = Column(Integer)
-    genre = Column(String)
-    imdb_rating = Column(Float)
+    title = Column(String(100), index=True, nullable=False)
+    year = Column(Integer, nullable=False)
+    genre = Column(String(50), nullable=False)
+    imdb_rating = Column(Float, nullable=False)
