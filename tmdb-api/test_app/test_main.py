@@ -3,11 +3,22 @@ import httpx
 from app.database import Base, engine, SessionLocal, get_db
 import pytest_asyncio
 from app.main import app
+from dotenv import load_dotenv
+import os
 
 
+'''------------------------------- adding dotenv to load path so that pytest could run tests -----------'''
+# dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+# load_dotenv(dotenv_path)
+# python_path= os.getenv("PYTHONPATH")
+
+'''use this in terminal => export PYTHONPATH=/home/harshitvarshney/Code/themovie-db-api-test/tmdb-api <='''
 
 # Create the test database tables
 Base.metadata.create_all(bind=engine)
+
+
+
 
 def override_get_db():
     try:
