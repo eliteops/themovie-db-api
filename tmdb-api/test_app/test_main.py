@@ -1,32 +1,29 @@
 import pytest
 import httpx 
-from app.database import Base, engine, SessionLocal, get_db
 import pytest_asyncio
 from app.main import app
 from dotenv import load_dotenv
 import os
+from test_db import engine, sessionlocal, get_db, Base
 
-
-'''------------------------------- adding dotenv to load path so that pytest could run tests -----------'''
+# Load test environment variables
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path)
-python_path= os.getenv("PYTHONPATH")
 
-'''use this in terminal => export PYTHONPATH=/home/harshitvarshney/Code/themovie-db-api/tmdb-api <='''
+# Set testing environment
+os.environ["TESTING"] = "true"
 
 # Create the test database tables
 Base.metadata.create_all(bind=engine)
 
-
-
-
 def override_get_db():
     try:
-        db = SessionLocal()
+        db = sessionlocal()
         yield db
     finally:
         db.close()
 
+# Override the database dependency for testing
 app.dependency_overrides[get_db] = override_get_db
 
 # Fixture for the async client
@@ -35,10 +32,6 @@ async def client():
     async with httpx.AsyncClient(
         transport=httpx.ASGITransport(app=app), base_url="http://test") as ac:
         yield ac
-
-
-'''----------------------------------------------------------------------------------------------'''
-
 
 # Test cases
 @pytest.mark.asyncio

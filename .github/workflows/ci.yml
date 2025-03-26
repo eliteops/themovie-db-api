@@ -7,9 +7,16 @@ jobs:
     runs-on: ubuntu-latest
     services:
       redis:
-        image: redis:latest
+        image: redis:alpine
         ports:
           - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          --health-start-period 10s
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -25,8 +32,8 @@ jobs:
           pip install -r tmdb-api/requirements.txt
 
       - name: Run tests
-        run: |
-          pytest
-
         env:
           PYTHONPATH: ${{ github.workspace }}/tmdb-api
+          TESTING: "true"  # This will disable Redis during tests
+        run: |
+          pytest
