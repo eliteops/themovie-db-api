@@ -5,6 +5,11 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -22,5 +27,6 @@ jobs:
       - name: Run tests
         run: |
           pytest
+
         env:
           PYTHONPATH: ${{ github.workspace }}/tmdb-api

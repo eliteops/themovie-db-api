@@ -12,7 +12,7 @@ dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 python_path= os.getenv("PYTHONPATH")
 
-'''use this in terminal => export PYTHONPATH=/home/harshitvarshney/Code/themovie-db-api-test/tmdb-api <='''
+'''use this in terminal => export PYTHONPATH=/home/harshitvarshney/Code/themovie-db-api/tmdb-api <='''
 
 # Create the test database tables
 Base.metadata.create_all(bind=engine)
