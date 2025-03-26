@@ -8,9 +8,9 @@ import os
 
 
 '''------------------------------- adding dotenv to load path so that pytest could run tests -----------'''
-# dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
-# load_dotenv(dotenv_path)
-# python_path= os.getenv("PYTHONPATH")
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+python_path= os.getenv("PYTHONPATH")
 
 '''use this in terminal => export PYTHONPATH=/home/harshitvarshney/Code/themovie-db-api-test/tmdb-api <='''
 
