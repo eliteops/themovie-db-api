@@ -22,3 +22,5 @@ jobs:
       - name: Run tests
         run: |
           pytest
+        env:
+          PYTHONPATH: ${{ github.workspace }}/tmdb-api
