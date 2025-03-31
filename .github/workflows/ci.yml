@@ -47,7 +47,7 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      uses: docker/setup-buildx-action@v2
       
     - name: Login to Docker Hub
       uses: docker/login-action@v2
@@ -66,9 +66,10 @@ jobs:
           type=sha,format=long
         
     - name: Build and push
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v4
       with:
-        context: ./tmdb-api
+        context: .
+        file: ./tmdb-api/Dockerfile
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
