@@ -1,9 +1,8 @@
 /.vscode
-/Basic_CRUD_API
 __pycache__/
 db.sqlite3
 .venv
-.gitignore
-Dockerfile
-docker-compose.yml
+# .gitignore
+# Dockerfile
+# docker-compose.yml
 *.db
