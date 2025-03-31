@@ -65,20 +65,10 @@ jobs:
           type=ref,event=tag
           type=sha,format=long
         
-    - name: Build and push
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        file: ./tmdb-api/Dockerfile
-        push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
-        build-args: |
-          BUILD_DATE=${{ steps.meta.outputs.created }}
-          VCS_REF=${{ github.sha }}
-          VERSION=${{ github.ref_name }}
+    - name: Build and push with docker-compose
+      run: |
+        docker-compose build --no-cache
+        docker-compose push tmdb-api
 
   # security:
   #   needs: build
